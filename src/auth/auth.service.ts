@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { SigninCredentials } from './DTO/Signin.dto';
+import { JoinRequest } from '../joinrequest/JoinRequest.schema';
 @Injectable()
 export class AuthService {
   constructor(
@@ -21,6 +22,7 @@ export class AuthService {
       ...creds,
       password: genPass,
       salt,
+      join_requests: [],
     });
     const result = await newUser.save();
     return result.id as string;
@@ -48,6 +50,26 @@ export class AuthService {
     const accessToken = await this.jwtService.sign(payload);
 
     return { accessToken };
+  }
+
+  async findUserByName(f_name: string, l_name: string) {
+    try {
+      var newList = [];
+      const findByFirstNameRes = await this.userModel.find({ f_name });
+      if (findByFirstNameRes.length === 0) {
+        return findByFirstNameRes;
+      } else {
+        findByFirstNameRes.map(item => {
+          newList.push({
+            _id: item._id,
+            f_name: item.f_name,
+            l_name: item.l_name,
+            email: item.email,
+          });
+        });
+        return newList;
+      }
+    } catch (error) {}
   }
 
   private async getUserByToken(token) {

@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { NoteModule } from './note/note.module';
+import { GroupModule } from './group/group.module';
+import { JoinrequestModule } from './joinrequest/joinrequest.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { NoteModule } from './note/note.module';
     ),
     AuthModule,
     NoteModule,
+    GroupModule,
+    JoinrequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],
