@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { SignupCredentials } from './DTO/Signup.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtPayload } from './jwt-payload.interface';
@@ -15,6 +15,7 @@ export class AuthService {
     @InjectConnection() private connection: Connection,
     private jwtService: JwtService,
   ) {}
+  private logger = new Logger('Auth service');
   async signUp(creds: SignupCredentials) {
     const salt = await bcrypt.genSalt();
     const genPass = await this.hashPassword(creds.password, salt);
@@ -48,7 +49,7 @@ export class AuthService {
       id: user[0].id,
     };
     const accessToken = await this.jwtService.sign(payload);
-
+    this.logger.log(user[0].email + ' ' + 'logged in');
     return { accessToken };
   }
 

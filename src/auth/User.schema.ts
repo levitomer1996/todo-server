@@ -16,9 +16,9 @@ export class User extends Document {
   @Prop({ required: true })
   l_name: string;
   @Prop({ required: true })
-  group: Group[];
+  group: string[];
   @Prop({ required: true })
-  join_requests: JoinRequest[];
+  join_requests: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

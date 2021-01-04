@@ -7,9 +7,13 @@ import { JoinRequestStatus } from './DTO/JoinRequestStatus.enum';
 @Schema()
 export class JoinRequest extends Document {
   @Prop({ required: true })
-  user: User;
+  user: string;
   @Prop({ required: true })
-  group: Group[];
+  group_Id: string;
+  @Prop({ required: true })
+  group_name: string;
+  @Prop({ required: true })
+  group_admin: string;
   @Prop({ required: true })
   status: JoinRequestStatus;
 }

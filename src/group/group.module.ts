@@ -13,6 +13,7 @@ import { JoinrequestService } from '../joinrequest/joinrequest.service';
 import { GroupController } from './group.controller';
 import { Group, GroupSchema } from './Group.schema';
 import { GroupService } from './group.service';
+import { GroupNote, GroupNoteSchema } from './GroupNote.schema';
 
 @Module({
   imports: [
@@ -20,6 +21,9 @@ import { GroupService } from './group.service';
     MongooseModule.forFeature([{ name: Group.name, schema: GroupSchema }]),
     MongooseModule.forFeature([
       { name: JoinRequest.name, schema: JoinRequestSchema },
+    ]),
+    MongooseModule.forFeature([
+      { name: GroupNote.name, schema: GroupNoteSchema },
     ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

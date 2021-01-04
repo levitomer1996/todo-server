@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import { User } from '../auth/User.schema';
 import { JoinRequest } from '../joinrequest/JoinRequest.schema';
 import { Note } from '../note/Note.Schema';
+import { GroupNote } from './GroupNote.schema';
 
 @Schema()
 export class Group extends Document {
@@ -11,11 +12,11 @@ export class Group extends Document {
   @Prop({ required: true })
   admin: User;
   @Prop({ required: true })
-  participants: User[];
+  participants: string[];
   @Prop({ required: true })
   requests: JoinRequest[];
   @Prop({ required: true })
-  notes: Note[];
+  notes: GroupNote[];
 }
 
 export const GroupSchema = SchemaFactory.createForClass(Group);
