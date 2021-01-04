@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { SignupCredentials } from './DTO/Signup.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtPayload } from './jwt-payload.interface';
@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { SigninCredentials } from './DTO/Signin.dto';
+import { JoinRequest } from '../joinrequest/JoinRequest.schema';
 @Injectable()
 export class AuthService {
   constructor(
@@ -14,6 +15,7 @@ export class AuthService {
     @InjectConnection() private connection: Connection,
     private jwtService: JwtService,
   ) {}
+  private logger = new Logger('Auth service');
   async signUp(creds: SignupCredentials) {
     const salt = await bcrypt.genSalt();
     const genPass = await this.hashPassword(creds.password, salt);
@@ -21,6 +23,7 @@ export class AuthService {
       ...creds,
       password: genPass,
       salt,
+      join_requests: [],
     });
     const result = await newUser.save();
     return result.id as string;
@@ -46,8 +49,28 @@ export class AuthService {
       id: user[0].id,
     };
     const accessToken = await this.jwtService.sign(payload);
-
+    this.logger.log(user[0].email + ' ' + 'logged in');
     return { accessToken };
+  }
+
+  async findUserByName(f_name: string, l_name: string) {
+    try {
+      var newList = [];
+      const findByFirstNameRes = await this.userModel.find({ f_name });
+      if (findByFirstNameRes.length === 0) {
+        return findByFirstNameRes;
+      } else {
+        findByFirstNameRes.map(item => {
+          newList.push({
+            _id: item._id,
+            f_name: item.f_name,
+            l_name: item.l_name,
+            email: item.email,
+          });
+        });
+        return newList;
+      }
+    } catch (error) {}
   }
 
   private async getUserByToken(token) {

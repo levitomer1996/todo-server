@@ -32,4 +32,9 @@ export class AuthController {
   getUserByToken(@GetUser() user): Promise<User> {
     return user;
   }
+  @Post('/finduserbyname')
+  findUserByName(@Body() body) {
+    const { f_name, l_name } = body;
+    return this.authService.findUserByName(f_name, l_name);
+  }
 }

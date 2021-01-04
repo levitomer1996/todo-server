@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Group } from '../group/Group.schema';
+import { JoinRequest } from '../joinrequest/JoinRequest.schema';
 
 @Schema()
 export class User extends Document {
@@ -13,6 +15,10 @@ export class User extends Document {
   f_name: string;
   @Prop({ required: true })
   l_name: string;
+  @Prop({ required: true })
+  group: string[];
+  @Prop({ required: true })
+  join_requests: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
