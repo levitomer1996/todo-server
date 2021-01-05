@@ -95,10 +95,21 @@ export class GroupService {
     }
   }
 
+  async leaveGroup(user: User, group_id: string) {
+    try {
+      const foundGroup = await this.groupModel.findByIdAndUpdate(group_id, {
+        $pull: { participants: { $in: user._id } },
+      });
+      await this.userModel.findByIdAndUpdate(user._id, {
+        $pull: { group: { $in: foundGroup._id } },
+      });
+    } catch (error) {}
+  }
+
   async getGroupNotes(user: User, group_id: string) {
     try {
-      const foundGroup = await this.groupModel.findById(group_id).exec();
-
+      const foundGroup = await this.groupModel.findById(group_id);
+      this.logger.log(foundGroup.notes);
       // this.logger.log(`Found Group: ${foundGroup.group_name}`);
       // this.logger.log(
       //   `Is user in group?: ${this.isUserInGroup(

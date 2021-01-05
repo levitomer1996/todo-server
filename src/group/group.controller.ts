@@ -47,4 +47,12 @@ export class GroupController {
     const { group_id } = body;
     return this.groupService.getGroupNotes(user, group_id);
   }
+  @Post('/leavegroup')
+  @UseGuards(AuthGuard())
+  @UsePipes(ValidationPipe)
+  leaveGroup(@GetUser() user, @Body() body) {
+    const { group_id } = body;
+
+    return this.groupService.leaveGroup(user, group_id);
+  }
 }
